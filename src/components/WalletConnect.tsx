@@ -4,7 +4,7 @@ import { LogOut, Wallet } from 'lucide-react'
 export function WalletConnect() {
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
-  const { connectors, connect, isPending } = useConnect()
+  const { connectors, connect, isPending, error } = useConnect()
 
   if (isConnected && address) {
     return (
@@ -20,7 +20,7 @@ export function WalletConnect() {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 relative">
       {connectors.map((connector) => (
         <button
           key={connector.uid}
@@ -32,6 +32,7 @@ export function WalletConnect() {
           {connector.name === 'Coinbase Wallet' ? 'Sign in with Base' : connector.name}
         </button>
       ))}
+      {error && <div className="absolute top-full mt-2 text-xs text-red-500 font-bold bg-slate-900 absolute right-0 p-2 rounded">{error.message}</div>}
     </div>
   )
 }
