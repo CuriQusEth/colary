@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Play, BrainCircuit, Activity, Lock, Award, Flame, ExternalLink, Loader2 } from 'lucide-react';
-import { useSendTransaction } from 'wagmi';
-import { encodeWithBuilderCode } from '../../lib/builderCode';
-import { parseEther } from 'viem';
+import { useERC8021Transaction } from '../../lib/erc8021/hooks/useERC8021Transaction';
+import { encodeFunctionData, parseEther } from 'viem';
 
 interface GameHubProps {
   onStartGame: (gameId: string) => void;
 }
 
 export function GameHub({ onStartGame }: GameHubProps) {
-  const { sendTransactionAsync, isPending } = useSendTransaction();
+  const { sendTransactionAsync, isPending } = useERC8021Transaction();
   const [txHash, setTxHash] = useState<string | null>(null);
 
   const handleMintAvatar = async () => {
@@ -26,7 +25,7 @@ export function GameHub({ onStartGame }: GameHubProps) {
       // Mock contract address
       const NFT_CONTRACT = '0x0000000000000000000000000000000000000001';
 
-      const data = encodeWithBuilderCode(MINT_ABI, 'mint', []);
+      const data = encodeFunctionData({ abi: MINT_ABI, functionName: 'mint', args: [] });
       console.log('Minting with builder code enabled...');
       
       const hash = await sendTransactionAsync({

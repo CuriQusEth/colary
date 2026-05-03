@@ -1,7 +1,23 @@
 import React from 'react';
 import { WalletConnect } from '../WalletConnect';
-import { Brain, Trophy, Activity, Zap } from 'lucide-react';
+import { Brain, Trophy, Activity, Zap, Loader2 } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import { ERC8021Demo } from '../../lib/erc8021/components/ERC8021Demo';
+import { useSayGM } from '../../hooks/useSayGM';
+
+function SayGMButton() {
+  const { sayGM, isPending } = useSayGM();
+  
+  return (
+    <button 
+      onClick={sayGM} 
+      disabled={isPending}
+      className="hidden sm:flex px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-2xl border-b-4 border-orange-700 transition-all active:translate-y-[2px] disabled:opacity-50 items-center justify-center min-w-[120px]"
+    >
+      {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : "Say GM! ☀️"}
+    </button>
+  );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isConnected } = useAccount();
@@ -29,6 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
         
         <div className="flex gap-3">
+          {isConnected && <SayGMButton />}
           {isConnected && (
             <div className="hidden md:flex items-center gap-3 bg-slate-900/80 border border-slate-700/50 rounded-2xl px-4 py-2 backdrop-blur-md">
               <div className="flex flex-col items-end">
@@ -61,6 +78,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <p className="text-lg text-slate-400">
               Complete daily mini-games, improve your cognitive skills, and earn $COLARY tokens on Base.
             </p>
+            <div className="mt-8">
+              <ERC8021Demo />
+            </div>
           </div>
         ) : (
           children
@@ -90,3 +110,4 @@ function NavItem({ label, active = false }: { label: string, active?: boolean })
     </button>
   );
 }
+
