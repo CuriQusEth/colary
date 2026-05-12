@@ -1,0 +1,42 @@
+{
+  "name": "Colary Orchestrator",
+  "description": "Colary - Train Your Brain platformunun AI Agent'i. Brain training games, cognitive exercises ve multi-game management yapan ERC-8004 uyumlu orchestrator agent.",
+  "version": "1.0.0",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "image": "https://colary.vercel.app/logo.png",
+  "wallets": {
+    "base": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B"
+  },
+  "services": [
+    {
+      "name": "A2A",
+      "endpoint": "https://colary.vercel.app/.well-known/agent-card.json",
+      "version": "1.0.0"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://colary.vercel.app/api/mcp",
+      "version": "1.0.0"
+    },
+    {
+      "name": "API",
+      "endpoint": "https://colary.vercel.app/api/agent",
+      "version": "1.0.0"
+    },
+    {
+      "name": "OASF",
+      "endpoint": "https://colary.vercel.app/.well-known/oasf.json",
+      "version": "1.0.0"
+    }
+  ],
+  "capabilities": [
+    "brain-training",
+    "multi-game-management",
+    "cognitive-exercises",
+    "daily-training",
+    "progress-tracking",
+    "task-orchestration"
+  ],
+  "supportedChains": ["eip155:8453"],
+  "active": true
+}
