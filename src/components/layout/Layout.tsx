@@ -12,9 +12,9 @@ function SayGMButton() {
     <button 
       onClick={sayGM} 
       disabled={isPending}
-      className="hidden sm:flex px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-2xl border-b-4 border-orange-700 transition-all active:translate-y-[2px] disabled:opacity-50 items-center justify-center min-w-[120px]"
+      className="flex px-3 py-2 md:px-4 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-2xl border-b-4 border-orange-700 transition-all active:translate-y-[2px] disabled:opacity-50 items-center justify-center min-w-[100px] md:min-w-[120px] text-sm md:text-base"
     >
-      {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : "Say GM! ☀️"}
+      {isPending ? <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" /> : "GM! ☀️"}
     </button>
   );
 }
@@ -31,36 +31,44 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Header */}
-      <header className="relative flex justify-between items-center z-10 max-w-7xl mx-auto w-full px-4 pt-8 pb-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <span className="text-2xl font-bold italic tracking-tighter text-white">C</span>
+      <header className="relative flex flex-col md:flex-row md:justify-between items-center gap-4 z-10 max-w-7xl mx-auto w-full px-4 pt-6 md:pt-8 pb-4">
+        <div className="flex w-full md:w-auto justify-between items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <span className="text-xl md:text-2xl font-bold italic tracking-tighter text-white">C</span>
+            </div>
+            <div>
+              <h1 className="text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-tight">
+                Colary <span className="text-blue-400">Brain</span>
+              </h1>
+              <p className="text-[10px] md:text-xs text-slate-400 font-mono">v2.0 // Orchestrator</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-black tracking-tight text-white uppercase">
-              Colary <span className="text-blue-400">Brain</span>
-            </h1>
-            <p className="text-xs text-slate-400 font-mono">v2.0 // Builder: bc_g6baqkul</p>
+          
+          <div className="md:hidden">
+            <WalletConnect />
           </div>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex w-full md:w-auto items-center justify-between md:justify-end gap-3 max-w-full overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
           {isConnected && <SayGMButton />}
           {isConnected && (
-            <div className="hidden md:flex items-center gap-3 bg-slate-900/80 border border-slate-700/50 rounded-2xl px-4 py-2 backdrop-blur-md">
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Brain Score</span>
-                <span className="text-lg font-mono text-blue-400 font-bold">2,840 BP</span>
+            <div className="flex flex-1 md:flex-none justify-between items-center gap-3 bg-slate-900/80 border border-slate-700/50 rounded-2xl px-3 py-2 backdrop-blur-md whitespace-nowrap">
+              <div className="flex flex-col items-start md:items-end">
+                <span className="text-[9px] md:text-[10px] text-slate-500 uppercase font-bold tracking-widest">Brain Score</span>
+                <span className="text-sm md:text-lg font-mono text-blue-400 font-bold">2,840 BP</span>
               </div>
-              <div className="w-[1px] h-8 bg-slate-700" />
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest uppercase">$COLARY</span>
-                <span className="text-lg font-mono text-emerald-400 font-bold underline decoration-emerald-400/30">1,420.50</span>
+              <div className="w-[1px] h-6 md:h-8 bg-slate-700 mx-1 md:mx-0" />
+              <div className="flex flex-col items-start md:items-end">
+                <span className="text-[9px] md:text-[10px] text-slate-500 uppercase font-bold tracking-widest">Token</span>
+                <span className="text-sm md:text-lg font-mono text-emerald-400 font-bold underline decoration-emerald-400/30">1,420 COLARY</span>
               </div>
             </div>
           )}
 
-          <WalletConnect />
+          <div className="hidden md:block">
+            <WalletConnect />
+          </div>
         </div>
       </header>
 
