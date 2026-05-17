@@ -29,13 +29,36 @@ async function startServer() {
     res.json({
       status: "ok",
       version: "1.0.0",
-      capabilities: [
-        "brain-training",
-        "multi-game-management",
-        "cognitive-exercises",
-        "daily-training",
-        "progress-tracking",
-        "task-orchestration"
+      capabilities: {
+        tools: {},
+        prompts: {},
+        resources: {}
+      },
+      tools: [
+        {
+          name: "calculate_score",
+          description: "Calculates the cognitive score of a user.",
+          inputSchema: {
+            type: "object",
+            properties: {
+              userId: { type: "string", description: "The ID of the user" }
+            },
+            required: ["userId"]
+          }
+        }
+      ],
+      prompts: [
+        {
+          name: "daily_workout",
+          description: "Starts daily workout sequence"
+        }
+      ],
+      resources: [
+        {
+          uri: "colary://data/leaderboard",
+          name: "Leaderboard Data",
+          description: "Current global leaderboard"
+        }
       ]
     });
   });

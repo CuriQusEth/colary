@@ -1,32 +1,74 @@
 {
   "name": "Colary Orchestrator",
-  "description": "Colary - Train Your Brain platformunun AI Agent'i. Brain training games, cognitive exercises ve multi-game management yapan ERC-8004 uyumlu orchestrator agent.",
+  "description": "Colary - Train Your Brain platformunun AI Agent'i. Brain training games, cognitive exercises and multi-game management yapan ERC-8004 uyumlu orchestrator agent.",
   "version": "1.0.0",
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "image": "https://colary.vercel.app/logo.png",
-  "wallets": {
-    "base": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B"
-  },
+  "owner": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B",
+  "agentWallet": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B",
+  "active": true,
+  "skills": [
+    {
+      "id": "brain-training",
+      "name": "Brain Training",
+      "description": "Real-time brain training games and exercises orchestration."
+    },
+    {
+      "id": "cognitive-exercises",
+      "name": "Cognitive Exercises",
+      "description": "Providing tasks to evaluate and improve cognitive skills."
+    },
+    {
+      "id": "multi-game-management",
+      "name": "Multi-Game Management",
+      "description": "Managing leaderboards, player progress and achievements."
+    },
+    {
+      "id": "warp-racing",
+      "name": "Warp Racing",
+      "description": "Real-time warp racing mechanics, speed optimization and competitive track management."
+    },
+    {
+      "id": "multi-track-orchestration",
+      "name": "Multi-Track Orchestration",
+      "description": "Manage and synchronize multiple racing instances and tracks simultaneously."
+    },
+    {
+      "id": "performance-optimization",
+      "name": "Performance Optimization",
+      "description": "Analyze and optimize racing performance, timing and strategy in real-time."
+    },
+    {
+      "id": "real-time-automation",
+      "name": "Real-Time Automation",
+      "description": "Automated rapid response protocol for real-time race events."
+    },
+    {
+      "id": "competitive-orchestration",
+      "name": "Competitive Orchestration",
+      "description": "Intelligent organization of high-stakes competitive racing brackets."
+    },
+    {
+      "id": "ecosystem-coordination",
+      "name": "Ecosystem Coordination",
+      "description": "Maintains and balances agent workflows across the broader ecosystem."
+    }
+  ],
   "services": [
     {
       "name": "A2A",
-      "endpoint": "https://colary.vercel.app/.well-known/agent-card.json",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "endpoint": "https://colary.vercel.app/.well-known/agent-card.json"
     },
     {
       "name": "MCP",
-      "endpoint": "https://colary.vercel.app/api/mcp",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "endpoint": "https://colary.vercel.app/api/mcp"
     },
     {
       "name": "API",
-      "endpoint": "https://colary.vercel.app/api/agent",
-      "version": "1.0.0"
-    },
-    {
-      "name": "OASF",
-      "endpoint": "https://colary.vercel.app/.well-known/oasf.json",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "endpoint": "https://colary.vercel.app/api/agent"
     }
   ],
   "capabilities": [
@@ -38,5 +80,12 @@
     "task-orchestration"
   ],
   "supportedChains": ["eip155:8453"],
-  "active": true
+  "x402Support": false,
+  "registrations": [
+    {
+      "agentId": null,
+      "agentRegistry": "eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
+    }
+  ],
+  "supportedTrust": ["reputation"]
 }
