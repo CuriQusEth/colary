@@ -9,21 +9,6 @@
   "active": true,
   "skills": [
     {
-      "id": "brain-training",
-      "name": "Brain Training",
-      "description": "Real-time brain training games and exercises orchestration."
-    },
-    {
-      "id": "cognitive-exercises",
-      "name": "Cognitive Exercises",
-      "description": "Providing tasks to evaluate and improve cognitive skills."
-    },
-    {
-      "id": "multi-game-management",
-      "name": "Multi-Game Management",
-      "description": "Managing leaderboards, player progress and achievements."
-    },
-    {
       "id": "warp-racing",
       "name": "Warp Racing",
       "description": "Real-time warp racing mechanics, speed optimization and competitive track management."

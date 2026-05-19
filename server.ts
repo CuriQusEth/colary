@@ -26,45 +26,82 @@ async function startServer() {
 
   // MCP Route
   app.get("/api/mcp", (req, res) => {
-    res.json({
-      status: "ok",
-      version: "1.0.0",
-      capabilities: {
-        tools: {},
-        prompts: {},
-        resources: {}
-      },
-      tools: [
-        {
-          name: "calculate_score",
-          description: "Calculates the cognitive score of a user.",
-          inputSchema: {
-            type: "object",
-            properties: {
-              userId: { type: "string", description: "The ID of the user" }
-            },
-            required: ["userId"]
-          }
-        }
-      ],
-      prompts: [
-        {
-          name: "daily_workout",
-          description: "Starts daily workout sequence"
-        }
-      ],
-      resources: [
-        {
-          uri: "colary://data/leaderboard",
-          name: "Leaderboard Data",
-          description: "Current global leaderboard"
-        }
-      ]
-    });
+    res.json({ status: "MCP Server Active. Use POST for JSON-RPC." });
   });
 
   app.post("/api/mcp", (req, res) => {
-    res.json({ status: "ok", received: req.body });
+    const { jsonrpc, id, method, params } = req.body || {};
+
+    if (jsonrpc !== '2.0') {
+      return res.status(400).json({ jsonrpc: "2.0", id: id || null, error: { code: -32600, message: "Invalid Request" } });
+    }
+
+    const tools = [
+      {
+        name: "get_race_status",
+        description: "returns current warp race state",
+        inputSchema: { type: "object", properties: {}, required: [] }
+      },
+      {
+        name: "start_race",
+        description: "initiates a warp race session",
+        inputSchema: { type: "object", properties: {}, required: [] }
+      },
+      {
+        name: "get_leaderboard",
+        description: "fetches competitive rankings",
+        inputSchema: { type: "object", properties: {}, required: [] }
+      },
+      {
+        name: "optimize_speed",
+        description: "triggers performance optimization",
+        inputSchema: { type: "object", properties: {}, required: [] }
+      },
+      {
+        name: "get_track_info",
+        description: "returns track metadata",
+        inputSchema: { 
+          type: "object", 
+          properties: { trackId: { type: "string", description: "The ID of the track" } }, 
+          required: ["trackId"] 
+        }
+      }
+    ];
+
+    if (method === 'initialize') {
+      return res.status(200).json({
+        jsonrpc: "2.0",
+        id,
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {}, prompts: {}, resources: {} },
+          serverInfo: { name: "Colary Orchestrator", version: "1.0.0" }
+        }
+      });
+    }
+
+    if (method === 'tools/list') {
+      return res.status(200).json({ jsonrpc: "2.0", id, result: { tools } });
+    }
+
+    if (method === 'tools/call') {
+      const toolName = params?.name;
+      return res.status(200).json({
+        jsonrpc: "2.0",
+        id,
+        result: { content: [{ type: "text", text: `Executed ${toolName} successfully.` }], isError: false }
+      });
+    }
+
+    if (method === 'prompts/list') {
+      return res.status(200).json({ jsonrpc: "2.0", id, result: { prompts: [] } });
+    }
+
+    if (method === 'resources/list') {
+      return res.status(200).json({ jsonrpc: "2.0", id, result: { resources: [] } });
+    }
+
+    return res.status(200).json({ jsonrpc: "2.0", id, error: { code: -32601, message: "Method not found" } });
   });
 
   // Agent Route
