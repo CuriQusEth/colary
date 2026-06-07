@@ -3,12 +3,25 @@ import { Layout } from './components/layout/Layout';
 import { GameHub } from './components/game/GameHub';
 import { SpeedTap } from './components/game/SpeedTap';
 import { useSaveScore } from './hooks/useSaveScore';
+import { useAccount, useSendTransaction } from 'wagmi';
+import { stringToHex } from 'viem';
+import { Sun } from 'lucide-react';
 
 export default function App() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [score, setScore] = useState(2840); // Base mock score from UI
   const { saveScore } = useSaveScore();
   const [isSaving, setIsSaving] = useState(false);
+  
+  const { isConnected } = useAccount();
+  const { sendTransaction } = useSendTransaction();
+
+  const sendGMTransaction = () => {
+    sendTransaction({
+      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+      data: stringToHex('gm'),
+    });
+  };
 
   const handleGameComplete = async (gameScore: number) => {
     const newScore = score + gameScore;
@@ -26,6 +39,18 @@ export default function App() {
 
   return (
     <Layout>
+      {isConnected && (
+        <div className="flex justify-center mb-8">
+          <button 
+            onClick={sendGMTransaction}
+            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold"
+          >
+            <Sun className="w-4 h-4" />
+            Say GM
+          </button>
+        </div>
+      )}
+
       {activeGame === null && (
         <GameHub onStartGame={setActiveGame} />
       )}
