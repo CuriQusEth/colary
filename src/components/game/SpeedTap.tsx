@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, RotateCcw, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SaveScoreButton } from '../SaveScoreButton';
 
 interface SpeedTapProps {
   onBack: () => void;
@@ -153,12 +154,9 @@ export function SpeedTap({ onBack, onComplete }: SpeedTapProps) {
                 >
                   <RotateCcw className="w-4 h-4" /> Retry
                 </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); handleFinish(); }}
-                  className="px-8 py-3 bg-emerald-500 hover:bg-emerald-400 rounded-2xl font-black text-slate-900 border-b-4 border-emerald-700 active:translate-y-[2px] transition-all"
-                >
-                  Save Score
-                </button>
+                <div onClick={(e) => e.stopPropagation()}>
+                  <SaveScoreButton score={Math.max(0, 1000 - ((reactionTime || 150) - 150) * 2)} />
+                </div>
               </div>
             </motion.div>
           )}

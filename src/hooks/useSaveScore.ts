@@ -1,33 +1,24 @@
-import { createSiweMessage, generateSiweNonce } from 'viem/siwe';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useWriteContract, useReadContract } from "wagmi";
+import { SCOREBOARD_ADDRESS, SCOREBOARD_ABI } from "../contracts";
 
-export function useSaveScore() {
-  const { address, chainId } = useAccount();
-  const { signMessageAsync } = useSignMessage();
+export function useSaveScore(playerAddress: `0x${string}`) {
+  const { writeContract, isPending, isSuccess, error } = useWriteContract();
 
-  const saveScore = async (score: number) => {
-    if (!address || !chainId) throw new Error('Not connected. Cannot save score.');
-    
-    // Create SIWE message confirming the score for backend verification
-    const nonce = generateSiweNonce();
-    const message = createSiweMessage({
-      address,
-      chainId,
-      domain: window.location.host,
-      nonce,
-      uri: window.location.origin,
-      version: '1',
-      statement: `I am saving my Colary Brain Score: ${score} points.`,
+  function saveScore(score: number) {
+    writeContract({
+      address: SCOREBOARD_ADDRESS,
+      abi: SCOREBOARD_ABI,
+      functionName: "recordScore",
+      args: [BigInt(score)],
     });
+  }
 
-    const signature = await signMessageAsync({ account: address as `0x${string}`, message });
-    console.log("Score verified with SIWE signature:", signature);
-    
-    // Here you would typically POST the signature and score to your backend
-    // await fetch('/api/score', { method: 'POST', body: JSON.stringify({ score, signature, message }) });
+  const { data: onchainScore } = useReadContract({
+    address: SCOREBOARD_ADDRESS,
+    abi: SCOREBOARD_ABI,
+    functionName: "getScore",
+    args: [playerAddress],
+  });
 
-    return signature;
-  };
-
-  return { saveScore };
+  return { saveScore, isPending, isSuccess, error, onchainScore };
 }
