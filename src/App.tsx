@@ -2,62 +2,55 @@ import React, { useState } from 'react';
 import { Layout } from './components/layout/Layout';
 import { GameHub } from './components/game/GameHub';
 import { SpeedTap } from './components/game/SpeedTap';
-import { useSaveScore } from './hooks/useSaveScore';
-import { useAccount, useSendTransaction } from 'wagmi';
-import { stringToHex } from 'viem';
+import { useGM } from './hooks/useGM';
+import { useScore } from './hooks/useScore';
 import { Sun } from 'lucide-react';
+import { McpApprovalModal } from './components/McpApprovalModal';
 
 export default function App() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
-  const [score, setScore] = useState(2840); // Base mock score from UI
-  const { saveScore } = useSaveScore();
-  const [isSaving, setIsSaving] = useState(false);
   
-  const { isConnected } = useAccount();
-  const { sendTransaction } = useSendTransaction();
-
-  const sendGMTransaction = () => {
-    sendTransaction({
-      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
-      data: stringToHex('gm'),
-    }, {
-      onError: (e: any) => {
-        if (!e?.message?.includes('User rejected') && !e?.message?.includes('denied transaction')) {
-            console.error("GM on-chain transaction failed:", e);
-        }
-      }
-    });
-  };
+  // Use onchain hooks instead
+  const { score, gmCount, refetch } = useScore();
+  const { sendGM, sendGMAndScore, isPending, approvalMcp, clearApproval } = useGM();
 
   const handleGameComplete = async (gameScore: number) => {
     const newScore = score + gameScore;
-    setIsSaving(true);
     try {
-      await saveScore(newScore);
-      setScore(newScore);
+      await sendGMAndScore(newScore);
+      refetch(); // Only refetch if running without MCP, or just refetch anyways
     } catch (e: any) {
       if (!e?.message?.includes('User rejected') && !e?.message?.includes('denied transaction')) {
         console.error("Failed to sign score", e);
       }
     } finally {
-      setIsSaving(false);
       setActiveGame(null);
     }
   };
 
+  const handleGMSync = async () => {
+    try {
+      await sendGM();
+      refetch();
+    } catch(e: any) {
+      if (!e?.message?.includes('User rejected') && !e?.message?.includes('denied transaction')) {
+        console.error("GM on-chain transaction failed:", e);
+      }
+    }
+  }
+
   return (
     <Layout>
-      {isConnected && (
-        <div className="flex justify-center mb-8">
-          <button 
-            onClick={sendGMTransaction}
-            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold"
-          >
-            <Sun className="w-4 h-4" />
-            Say GM
-          </button>
-        </div>
-      )}
+      <div className="flex justify-center mb-8 gap-4">
+        <button 
+          onClick={handleGMSync}
+          disabled={isPending}
+          className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold disabled:opacity-50"
+        >
+          <Sun className="w-4 h-4" />
+          Say GM ({gmCount})
+        </button>
+      </div>
 
       {activeGame === null && (
         <GameHub onStartGame={setActiveGame} />
@@ -83,6 +76,15 @@ export default function App() {
             BACK TO HUB
           </button>
         </div>
+      )}
+
+      {approvalMcp && (
+        <McpApprovalModal 
+          approvalUrl={approvalMcp.approvalUrl}
+          requestId={approvalMcp.requestId}
+          onClose={clearApproval}
+          onSuccess={() => { clearApproval(); refetch(); }}
+        />
       )}
     </Layout>
   );

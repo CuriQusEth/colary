@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "base-mcp": { "url": "https://mcp.base.org" }
+  }
+}

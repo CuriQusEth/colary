@@ -1,16 +1,19 @@
 import React from 'react';
 import { WalletConnect } from '../WalletConnect';
-import { Brain, Trophy, Activity, Zap, Loader2 } from 'lucide-react';
+import { Brain } from 'lucide-react';
 import { useAccount } from 'wagmi';
 import { ERC8021Demo } from '../../lib/erc8021/components/ERC8021Demo';
-import { useSayGM } from '../../hooks/useSayGM';
+import { useGM } from '../../hooks/useGM';
+import { useScore } from '../../hooks/useScore';
+import { Leaderboard } from '../Leaderboard';
+import { Loader2 } from 'lucide-react';
 
 function SayGMButton() {
-  const { sayGM, isPending } = useSayGM();
+  const { sendGM, isPending } = useGM();
   
   return (
     <button 
-      onClick={sayGM} 
+      onClick={sendGM} 
       disabled={isPending}
       className="flex px-3 py-2 md:px-4 bg-orange-500 hover:bg-orange-400 text-white font-black rounded-2xl border-b-4 border-orange-700 transition-all active:translate-y-[2px] disabled:opacity-50 items-center justify-center min-w-[100px] md:min-w-[120px] text-sm md:text-base"
     >
@@ -21,6 +24,7 @@ function SayGMButton() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isConnected } = useAccount();
+  const { score } = useScore();
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 overflow-x-hidden flex flex-col font-sans selection:bg-blue-500/30">
@@ -56,12 +60,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex flex-1 md:flex-none justify-between items-center gap-3 bg-slate-900/80 border border-slate-700/50 rounded-2xl px-3 py-2 backdrop-blur-md whitespace-nowrap">
               <div className="flex flex-col items-start md:items-end">
                 <span className="text-[9px] md:text-[10px] text-slate-500 uppercase font-bold tracking-widest">Brain Score</span>
-                <span className="text-sm md:text-lg font-mono text-blue-400 font-bold">2,840 BP</span>
+                <span className="text-sm md:text-lg font-mono text-blue-400 font-bold">{score} BP</span>
               </div>
               <div className="w-[1px] h-6 md:h-8 bg-slate-700 mx-1 md:mx-0" />
               <div className="flex flex-col items-start md:items-end">
                 <span className="text-[9px] md:text-[10px] text-slate-500 uppercase font-bold tracking-widest">Token</span>
-                <span className="text-sm md:text-lg font-mono text-emerald-400 font-bold underline decoration-emerald-400/30">1,420 COLARY</span>
+                <span className="text-sm md:text-lg font-mono text-emerald-400 font-bold underline decoration-emerald-400/30">{(score / 2).toFixed(0)} COLARY</span>
               </div>
             </div>
           )}
@@ -73,26 +77,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 pt-4 pb-12 relative z-10 flex flex-col">
-        {!isConnected ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-6">
-            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 flex items-center justify-center mb-4 border border-blue-500/30">
-              <Brain className="w-12 h-12 text-blue-400" />
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 pt-4 pb-12 relative z-10 flex flex-col md:flex-row gap-8">
+        <div className="flex-1">
+          {!isConnected ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-6">
+              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 flex items-center justify-center mb-4 border border-blue-500/30">
+                <Brain className="w-12 h-12 text-blue-400" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                Earn Crypto While <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Train Your Brain</span>
+              </h2>
+              <p className="text-lg text-slate-400">
+                Complete daily mini-games, improve your cognitive skills, and earn $COLARY tokens on Base.
+              </p>
+              <div className="mt-8">
+                <ERC8021Demo />
+              </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
-              Earn Crypto While <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Train Your Brain</span>
-            </h2>
-            <p className="text-lg text-slate-400">
-              Complete daily mini-games, improve your cognitive skills, and earn $COLARY tokens on Base.
-            </p>
-            <div className="mt-8">
-              <ERC8021Demo />
-            </div>
-          </div>
-        ) : (
-          children
-        )}
+          ) : (
+            children
+          )}
+        </div>
+        
+        {/* Render leaderboard in headless (agent) mode effectively or on the side */}
+        <div className="w-full md:w-[350px]">
+          <Leaderboard />
+        </div>
       </main>
 
       {isConnected && (
