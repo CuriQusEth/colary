@@ -8,7 +8,7 @@ export const queryClient = new QueryClient()
 export const wagmiConfig = createConfig({
   chains: [base, baseSepolia],
   connectors: [
-    injected(),
+    injected({ target: 'metaMask' }),
     coinbaseWallet({ 
       appName: 'Colary - Train Your Brain',
       preference: 'all'

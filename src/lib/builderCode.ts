@@ -1,4 +1,5 @@
-import { encodeFunctionData, toHex, type Abi } from 'viem';
+import { encodeFunctionData, type Abi } from 'viem';
+import { generateAttributionSuffix } from './erc8021/utils';
 
 export const BUILDER_CODE = 'bc_g6baqkul';
 
@@ -11,8 +12,8 @@ export function encodeWithBuilderCode(
   args?: any[]
 ): `0x${string}` {
   const data = encodeFunctionData({ abi, functionName, args });
-  const builderCodeHex = toHex(BUILDER_CODE).replace('0x', '');
-  return `${data}${builderCodeHex}` as `0x${string}`;
+  const suffix = generateAttributionSuffix(BUILDER_CODE).replace('0x', '');
+  return `${data}${suffix}` as `0x${string}`;
 }
 
 // A mock ABI for Colary rewards and staking to demonstrate usage

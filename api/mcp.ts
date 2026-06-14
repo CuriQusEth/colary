@@ -43,6 +43,16 @@ export default async function handler(req: Request) {
 
       const tools = [
         {
+          name: "base_get_wallet",
+          description: "Fetch the Base Account wallet address and native asset balances.",
+          inputSchema: { type: "object", properties: {}, required: [] }
+        },
+        {
+          name: "base_send_transaction",
+          description: "Send transactions, tokens, or batched contract calls on Base.",
+          inputSchema: { type: "object", properties: { to: { type: "string" }, amount: { type: "string" }, token: { type: "string" } }, required: ["to"] }
+        },
+        {
           name: "get_race_status",
           description: "returns current warp race state",
           inputSchema: { type: "object", properties: {}, required: [] }

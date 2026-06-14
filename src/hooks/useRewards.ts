@@ -31,8 +31,10 @@ export function useRewards() {
 
       setTxHash(hash);
       return hash;
-    } catch (err) {
-      console.error("Failed to claim rewards:", err);
+    } catch (err: any) {
+      if (!err?.message?.includes('User rejected') && !err?.message?.includes('denied transaction')) {
+        console.error("Failed to claim rewards:", err);
+      }
       throw err;
     } finally {
       setIsClaiming(false);

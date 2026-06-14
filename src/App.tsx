@@ -20,6 +20,12 @@ export default function App() {
     sendTransaction({
       to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
       data: stringToHex('gm'),
+    }, {
+      onError: (e: any) => {
+        if (!e?.message?.includes('User rejected') && !e?.message?.includes('denied transaction')) {
+            console.error("GM on-chain transaction failed:", e);
+        }
+      }
     });
   };
 
@@ -29,8 +35,10 @@ export default function App() {
     try {
       await saveScore(newScore);
       setScore(newScore);
-    } catch (e) {
-      console.error("Failed to sign score", e);
+    } catch (e: any) {
+      if (!e?.message?.includes('User rejected') && !e?.message?.includes('denied transaction')) {
+        console.error("Failed to sign score", e);
+      }
     } finally {
       setIsSaving(false);
       setActiveGame(null);

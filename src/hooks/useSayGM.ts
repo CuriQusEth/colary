@@ -23,8 +23,10 @@ export function useSayGM() {
       });
       setTxHash(hash);
       return hash;
-    } catch (err) {
-      console.error("GM on-chain transaction failed:", err);
+    } catch (err: any) {
+      if (!err?.message?.includes('User rejected') && !err?.message?.includes('denied transaction')) {
+        console.error("GM on-chain transaction failed:", err);
+      }
       throw err;
     } finally {
       setIsPending(false);

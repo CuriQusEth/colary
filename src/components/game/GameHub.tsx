@@ -34,8 +34,10 @@ export function GameHub({ onStartGame }: GameHubProps) {
         value: parseEther('0.001'), // 0.001 ETH price
       });
       setTxHash(hash);
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      if (!err?.message?.includes('User rejected') && !err?.message?.includes('denied transaction')) {
+        console.error(err);
+      }
     }
   };
 
