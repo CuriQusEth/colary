@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useAccount } from "wagmi";
 import { useSaveScore } from "../hooks/useSaveScore";
 import { saveScoreViaMcp, readScoreViaMcp } from "../lib/baseMcp";
-import { SCOREBOARD_ADDRESS } from "../contracts";
 import { SaveScoreModal } from "./SaveScoreModal";
 
 export function SaveScoreButton({ score }: { score: number }) {
-  const { isConnected } = useAccount();
-  const { saveScore, isPending: wagmiPending, isSuccess: wagmiSuccess } = useSaveScore(SCOREBOARD_ADDRESS);
+  const { isConnected, address } = useAccount();
+  const { saveScore, isPending: wagmiPending, isSuccess: wagmiSuccess } = useSaveScore(address as `0x${string}`);
   const [mcpPending, setMcpPending] = useState(false);
   const [mcpSuccess, setMcpSuccess] = useState(false);
   const [approvalMcp, setApprovalMcp] = useState<{ approvalUrl: string; requestId: string } | null>(null);

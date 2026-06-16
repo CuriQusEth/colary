@@ -6,8 +6,8 @@ interface ConnectModalProps {
 }
 
 export function ConnectModal({ onClose }: ConnectModalProps) {
-  const { connectors, connect } = useConnect();
-  const { isConnected, address } = useAccount();
+  const { connectors, connect, isPending: isConnecting } = useConnect();
+  const { isConnected, isReconnecting, address } = useAccount();
   const { disconnect } = useDisconnect();
 
   return (
@@ -21,7 +21,9 @@ export function ConnectModal({ onClose }: ConnectModalProps) {
         </button>
         <h3 className="text-xl font-bold mb-6 text-white text-center">Connect Wallet</h3>
         
-        {isConnected ? (
+        {isReconnecting ? (
+          <div className="text-center text-slate-400 py-4">Reconnecting...</div>
+        ) : isConnected ? (
           <div className="space-y-4">
             <p className="text-center text-slate-300 break-all bg-slate-800 rounded p-2">
               {address}
@@ -39,7 +41,8 @@ export function ConnectModal({ onClose }: ConnectModalProps) {
               <button
                 key={connector.uid}
                 onClick={() => { connect({ connector }); onClose(); }}
-                className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all flex items-center justify-between"
+                disabled={isConnecting}
+                className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all flex items-center justify-between disabled:opacity-50"
               >
                 <span className="font-medium capitalize">{connector.name}</span>
                 <span className="text-xs text-slate-500 bg-slate-900 px-2 py-1 rounded">Connect</span>

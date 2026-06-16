@@ -1,6 +1,7 @@
 import { http, createConfig } from 'wagmi'
 import { base } from 'wagmi/chains'
 import { injected, coinbaseWallet, walletConnect } from 'wagmi/connectors'
+import { baseAccount } from 'wagmi/connectors'
 import { QueryClient } from '@tanstack/react-query'
 import { DATA_SUFFIX } from './erc8021'
 
@@ -10,6 +11,7 @@ export const config = createConfig({
   chains: [base],
   connectors: [
     injected(),
+    baseAccount({ appName: 'Colary - Train Your Brain' }),
     coinbaseWallet({ 
       appName: 'Colary - Train Your Brain',
       preference: 'all'
