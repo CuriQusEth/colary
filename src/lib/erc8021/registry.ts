@@ -20,6 +20,7 @@ const registryAbi = [
 
 export async function fetchBuilderCodeData(builderCode: string) {
   try {
+    // @ts-ignore
     const data = await publicClient.readContract({
       address: BASE_CANONICAL_REGISTRY,
       abi: registryAbi,

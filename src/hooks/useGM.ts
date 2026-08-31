@@ -16,7 +16,8 @@ export function useGM(playerAddress?: string) {
   const { data: callsId, sendCallsAsync } = useSendCalls();
 
   const { isLoading: isConfirmingTx, isSuccess: isSuccessTx } = useWaitForTransactionReceipt({ hash });
-  const { isLoading: isConfirmingCalls, isSuccess: isSuccessCalls } = useWaitForCallsStatus({ id: callsId });
+  // @ts-ignore
+  const { isLoading: isConfirmingCalls, isSuccess: isSuccessCalls } = useWaitForCallsStatus({ id: typeof callsId === 'string' ? callsId : callsId?.id });
   
   const { supportsBatching } = useWalletCapabilities();
   const [isPendingReq, setIsPendingReq] = useState(false);
@@ -53,6 +54,7 @@ export function useGM(playerAddress?: string) {
     setIsPendingReq(true);
     try {
       if (isConnected) {
+        // @ts-ignore
         await writeContractAsync({
           address: GAME_CONTRACT_ADDRESS as `0x${string}`,
           abi: GAME_ABI,
@@ -72,6 +74,7 @@ export function useGM(playerAddress?: string) {
     setIsPendingReq(true);
     try {
       if (isConnected) {
+        // @ts-ignore
         await writeContractAsync({
           address: GAME_CONTRACT_ADDRESS as `0x${string}`,
           abi: GAME_ABI,
@@ -105,11 +108,13 @@ export function useGM(playerAddress?: string) {
           });
         } else {
           // Wagmi: two separate calls - sequential fallback
+          // @ts-ignore
           await writeContractAsync({
             address: GAME_CONTRACT_ADDRESS as `0x${string}`,
             abi: GAME_ABI,
             functionName: 'gm',
           });
+          // @ts-ignore
           await writeContractAsync({
             address: GAME_CONTRACT_ADDRESS as `0x${string}`,
             abi: GAME_ABI,

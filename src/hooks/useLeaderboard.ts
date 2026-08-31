@@ -5,7 +5,7 @@ import { encodeFunctionData, decodeFunctionResult } from 'viem';
 
 export function useLeaderboard(limit: number = 10) {
   const { isConnected } = useAccount();
-  const [mcpPlayers, setMcpPlayers] = useState<address[]>([]);
+  const [mcpPlayers, setMcpPlayers] = useState<string[]>([]);
   const [mcpScores, setMcpScores] = useState<number[]>([]);
 
   // Wagmi read

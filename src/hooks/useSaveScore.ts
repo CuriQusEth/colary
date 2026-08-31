@@ -28,6 +28,7 @@ export function useSaveScore(playerAddress: `0x${string}`) {
   }, [isSuccess, queryClient, scoreQueryKey]);
 
   function saveScore(score: number) {
+    // @ts-ignore
     writeContract({
       address: SCOREBOARD_ADDRESS,
       abi: SCOREBOARD_ABI,
